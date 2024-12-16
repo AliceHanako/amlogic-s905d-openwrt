@@ -376,7 +376,7 @@ jobs:
           echo "status=success" >> ${GITHUB_OUTPUT}
 
       - name: Upload OpenWrt to Release
-        uses: ncipollo/release-action@main
+        uses: AliceHanako/release-action@main
         if: ${{ steps.clean.outputs.status }} == 'success' && !cancelled()
         with:
           tag: ${{ steps.codes.outputs.build_tag }}
@@ -424,21 +424,3 @@ jobs:
             
 schedule:
   - cron: '0 17 * * *'
-
-- name: Upload OpenWrt Firmware to Release
-  uses: ncipollo/release-action@main
-  if: ${{ env.PACKAGED_STATUS }} == 'success' && !cancelled()
-  with:
-    tag: openwrt_amlogic_s9xxx_lede_${{ env.PACKAGED_OUTPUTDATE }}
-    artifacts: ${{ env.PACKAGED_OUTPUTPATH }}/*
-    allowUpdates: true
-    token: ${{ secrets.GITHUB_TOKEN }}
-    body: |
-      This is OpenWrt firmware for Amlogic s9xxx tv box
-      * Firmware information
-      Default IP: 192.168.1.1
-      Default username: root
-      Default password: password
-      Default WIFI name: OpenWrt
-      Default WIFI password: none
-      Install to EMMC: Login to OpenWrt → System → Amlogic Service → Install OpenWrt
